@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { types } from "sass";
 
 //create your first component
 export function Home() {
@@ -16,12 +17,33 @@ export function Home() {
 			};
 			let newTodoList = [...todoList, newTodo];
 			setTodoList(newTodoList);
+			updateData(newTodoList);
+			e.target.value = "";
 		}
 	};
 	const getData = () => {
 		fetch("https://assets.breatheco.de/apis/fake/todos/user/marcosspe")
 			.then(resp => resp.json())
 			.then(data => setTodoList(data))
+			.catch(error => console.log(error));
+	};
+
+	const updateData = updatedList => {
+		let updatedListToSend = JSON.stringify(updatedList);
+		let options = {
+			method: "PUT",
+			body: updatedListToSend,
+			headers: {
+				"content-type": "application/json"
+			}
+		};
+
+		fetch(
+			"https://assets.breatheco.de/apis/fake/todos/user/marcosspe",
+			options
+		)
+			.then(resp => resp.json())
+			.then(data => console.log(data))
 			.catch(error => console.log(error));
 	};
 
